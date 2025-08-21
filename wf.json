@@ -1,0 +1,362 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1qH2Ezf-D6aXDYmyc3bZkrnhIZGXFHT-s8JIuLqu3VWc",
+          "mode": "list",
+          "cachedResultName": "Social  Media Workflow",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qH2Ezf-D6aXDYmyc3bZkrnhIZGXFHT-s8JIuLqu3VWc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qH2Ezf-D6aXDYmyc3bZkrnhIZGXFHT-s8JIuLqu3VWc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "fd05fa6f-4bcf-439e-a9ae-6e970a18dbc4",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "33eJPrDnMj4rxEw1",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=System:\"You are a social media strategist with expertise in content adaptation\"\nUser:\"Analyze the article and create a summary that:\n1.Captures 3 most important insights.\n2.Includes any actionable advice tips.\n3.Maintains the original tone and perspective\n4.Highlights the implication of the target audience\n5.Stays under 200 words for social media adaptation.\"\n\nArticle:\"{{ $json['Article Links'] }}\"",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "\"You are a social media strategist with expertise in content adaptation"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "Analyze the article and create a summary that:  1.Captures 3 most important insights.  2.Includes any actionable advice tips.  3.Maintains the original tone and perspective  4.Highlights the implication of the target audience  5.Stays under 200 words for social media adaptation."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        96,
+        -32
+      ],
+      "id": "080590d0-327a-4686-94de-dae6eec6005a",
+      "name": "Summarize Articles"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        224
+      ],
+      "id": "20cf5228-d685-43ce-85e7-db47d60b6b8e",
+      "name": "OpenAI Model-Article Summarizer",
+      "credentials": {
+        "openAiApi": {
+          "id": "8uZvJSWqtBH4w4i4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        528,
+        -176
+      ],
+      "id": "92535b03-40ca-4351-b219-923a49809d55",
+      "name": "OpenAI Model-Article Summarizer1",
+      "credentials": {
+        "openAiApi": {
+          "id": "8uZvJSWqtBH4w4i4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Assume the role of an industry expert and draft a Linkedin post discussing key points\nfrom a news article relevant to artificial intelligence. The post should provide insightful\nanalysis, connect with current industry trends, and encourage professional engagement\nor discussion. Highlight any notable implications for the industry. Since LinkedIn\nsupports detailed posts, ensure it is informative and structured. Include a professional\ncall to action. Here's a summary of the article:  {{ $json.text }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        528,
+        -384
+      ],
+      "id": "03a72c40-4ac1-4702-b2ea-44fb17040bbb",
+      "name": "Linkedin LLM Chain Node"
+    },
+    {
+      "parameters": {
+        "person": "cdrFa9Qm06",
+        "text": "={{ $json.text }}",
+        "shareMediaCategory": "IMAGE",
+        "binaryPropertyName": "",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -240
+      ],
+      "id": "063ba1c0-effb-4eb7-b856-43d93f6c5d89",
+      "name": "Post to Linkedin",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "WP6FyffRsv6uAOoq",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        272
+      ],
+      "id": "f4b74280-c8a0-4498-8b9f-a59ed228d9c0",
+      "name": "OpenAI Model-Article Summarizer2",
+      "credentials": {
+        "openAiApi": {
+          "id": "8uZvJSWqtBH4w4i4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Draft an X post as an Al industry expert analyzing a key news article. The post should:\nDeliver sharp insights on the article's main points\nConnect to current Al trends\nSpark discussion with a thought-provoking question\nBe punchy and engaging\nEnd with a clear call to action\nLength: Within 30 words\nFocus: What matters most to the Al community. Make every word count.\nArticle summary: {{ $json.text }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        544,
+        96
+      ],
+      "id": "e836e0e0-ab5a-421c-baf9-d8cd3da274ef",
+      "name": "Twitter Article Summarizer Node"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        896,
+        176
+      ],
+      "id": "5b2b0f10-0a19-4481-8d48-2f9c8e65e141",
+      "name": "Post to X(Twitter)",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "vfht6PHuS14plo4Q",
+          "name": "X account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        656,
+        -80
+      ],
+      "id": "75576d52-d9b1-49f5-b85f-1a3cb4c94dcc",
+      "name": "Generate an image",
+      "credentials": {
+        "openAiApi": {
+          "id": "8uZvJSWqtBH4w4i4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Summarize Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model-Article Summarizer": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarize Articles",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Articles": {
+      "main": [
+        [
+          {
+            "node": "Linkedin LLM Chain Node",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Twitter Article Summarizer Node",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model-Article Summarizer1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Linkedin LLM Chain Node",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Linkedin LLM Chain Node": {
+      "main": [
+        [
+          {
+            "node": "Post to Linkedin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Linkedin": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Model-Article Summarizer2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Twitter Article Summarizer Node",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Twitter Article Summarizer Node": {
+      "main": [
+        [
+          {
+            "node": "Post to X(Twitter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Post to Linkedin",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to X(Twitter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3427662d-a766-4b96-b2ed-5672bc7ae7cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7d56d4b29120a4e07e8662b652a969cab0fd284f368779a9b0b1b442a4cbc7d4"
+  },
+  "id": "efGpm2kOTcnKhIuE",
+  "tags": []
+}
